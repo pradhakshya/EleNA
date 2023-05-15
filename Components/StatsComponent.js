@@ -5,9 +5,6 @@ import * as React from 'react';
 import { Card, CardContent,CardMedia, Typography,CardActionArea } from '@material-ui/core';
 import image from '../assets/cycleman.jpg'
 
-
-
-
 export default function StatsComponent({stats}) {
   return (
     <Card style={{marginLeft:70,marginTop:120,height:350,width:400, backgroundColor: '#86d63d'}}>
@@ -20,10 +17,10 @@ export default function StatsComponent({stats}) {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            Elevation: {stats.elevationGain}m
+            Elevation:{stats.elevationGain}m
           </Typography>
           <Typography gutterBottom variant="h5" component="div">
-            Distance: {stats.pathLength}m
+            Distance:{stats.pathLength}m
           </Typography>
         </CardContent>
       </CardActionArea>

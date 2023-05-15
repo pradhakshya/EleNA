@@ -2,8 +2,8 @@
 */
 
 import React, { Component, useEffect } from 'react';
-import L from 'leaflet';
-import Routing from 'leaflet-routing-machine';
+import Routing from "leaflet-routing-machine";
+import L from "leaflet";
 
 export default function MapComponent(props){
     useEffect(()=>{
@@ -12,12 +12,10 @@ export default function MapComponent(props){
 const createMap=()=>{
     let map = L.map('map', {
         center: [42.373222, -72.519852],
+        weight:10,
         zoom: 15,
-        weight: 10,
         layers: [
-          // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png')
           L.tileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png")
-          // L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png")
         ]
       });
       if(props.route){

@@ -84,8 +84,9 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const MainComponent =()=>{
-   /*State variables 
-   */
+  // state variables
+    const inputRef1 = useRef();
+    const inputRef2 = useRef();
     const [directions, setDirections] = useState(null);
     const [map, setMap] = useState(undefined);
     const [alignment, setAlignment] = useState('max');
@@ -100,8 +101,7 @@ const MainComponent =()=>{
     const [sourceMarker,setsourceMarker] = useState(undefined);
     const [destMarker,setDestMarker] = useState(undefined);
     const [stats,setStats] = useState(undefined)
-    const inputRef1 = useRef();
-    const inputRef2 = useRef();
+
 
     const classes = useStyles();
     const center = {
@@ -109,20 +109,17 @@ const MainComponent =()=>{
         lng:-72.51972222
       };
 
-     /* Method to handle type of elevation
-   */
+    // type of elevation
     const handleChange = (event, newAlignment) => {
         setAlignment(newAlignment);
     };
 
-     /* useEffect to load initial map
-   */
+    //Load initial map (useEffect)
     useEffect(()=>{
       createMap();
     },[]);
 
-    /* useEffect to assemble and plot directions on the map 
-   */
+    //Plot direction on the map(useEffect)
     useEffect(()=>{
       if(route.length>0){
         map.panTo(new L.LatLng(
@@ -149,8 +146,7 @@ const MainComponent =()=>{
         } 
     },[route]);
 
-    /* Method to load the OSM map
-   */
+    // to load the OSM map
     const createMap=()=>{
       let map = L.map('map', {
           center: [42.373222, -72.519852],
@@ -165,8 +161,7 @@ const MainComponent =()=>{
         setMap(map);
       }
       
-         /* Method to pre-process the api data
-   */
+  //pre-process api data
     const handleSubmit=()=>{
         var request = {
           'origin': source,
@@ -184,8 +179,7 @@ const MainComponent =()=>{
         apiCall(formData);
     }
 
-    /* Method to request an api call to the backend and fetch the response
-   */
+  //  Request an api call to the backend and fetch the response 
     const apiCall = (request)=>{
       setLoading(true);
       fetch("/get_route/", {
@@ -214,8 +208,7 @@ const MainComponent =()=>{
         setDest(latLng);
      }
 
-      /* Method to handle reset and empty the field content
-   */
+  // handle Reset 
      const handleReset = ()=>{
          setSource(undefined);
          setDest(undefined);
@@ -234,9 +227,7 @@ const MainComponent =()=>{
 
      }
 
-    /* Rendering UI for the ELENA dashboard
-   */
- 
+ //Render UI
     return (
       <div>
         <AppBar class={classes.appbar} position="static">
