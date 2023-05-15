@@ -266,16 +266,6 @@ const MainComponent =()=>{
               onChange={destinationChange}
               placeHolder="Destination"
             />
-            {/* return(
-            <select
-              value={alignment}
-              onChange={handleChange}
-              // variant="outlined" 
-              className="dropdown">
-              <MenuItem value="max">Maximum</MenuItem>
-              <MenuItem value="min">Minimum</MenuItem>
-            </select>
-            ); */}
             <ToggleButtonGroup
               color="primary"
               value={alignment}
