@@ -3,21 +3,22 @@
 
 import { useRef, useEffect, useState } from "react";
 import React from 'react';
-const AutoComplete = ({inputRef,onChange,placeHolder}) => {
- const autoCompleteRef = useRef();
+
+const AutoComp = ({inputRef,onChange,placeHolder}) => {
+ const AutoCompRef = useRef();
  const options = {
   componentRestrictions: { country: "usa" },
   fields: ["address_components", "geometry", "icon", "name"],
   types: ["establishment"]
  };
  useEffect(() => {
-  autoCompleteRef.current = new window.google.maps.places.Autocomplete(
+  AutoCompRef.current = new window.google.maps.places.AutoComp(
    inputRef.current,
    options
   );
 
- autoCompleteRef.current.addListener("place_changed", async function () {
-    const place = await autoCompleteRef.current.getPlace();
+ AutoCompRef.current.addListener("place_changed", async function () {
+    const place = await AutoCompRef.current.getPlace();
     onChange('('+place.geometry.location.lat()+', '+place.geometry.location.lng()+')');
    });
   }, []);
@@ -28,4 +29,4 @@ const AutoComplete = ({inputRef,onChange,placeHolder}) => {
   </div>
  )
 };
-export default AutoComplete;
+export default AutoComp;
