@@ -33,7 +33,7 @@ class Dijkstra(SearchAlgorithm):
             raise ValueError(f"Graph provider must be a subclass of GraphProvider")
         self._graph_provider = graph_provider
 
-    def _distance(self, node1, node2):
+    def _distance(self, n1, n2):
         """Obtain the distance between nodes.
 
         Args:
@@ -44,7 +44,7 @@ class Dijkstra(SearchAlgorithm):
             The distance between nodes, taken to be the length of the
             directed edge connecting them.
         """
-        return self.graph_provider.get_edge_distance(node1, node2)
+        return self.graph_provider.get_edge_distance(n1, n2)
 
     def _elevation(self, node):
         """Obtain the elevation of a given node.
@@ -75,7 +75,7 @@ class Dijkstra(SearchAlgorithm):
         self._dist = defaultdict(lambda: math.inf)
         # Map a node 'n' to the (signed) elevation diff between n and prev[n]
         self._ele_diff = {}
-        visited = set()
+        visited_nodes= set()
         priority_queue = heapdict()
 
         # Disable lazy loading to prevent infinite chunks from being loaded
@@ -87,10 +87,10 @@ class Dijkstra(SearchAlgorithm):
         priority_queue[start] = self._dist[start]
         while len(priority_queue) > 0:
             curr_node, curr_dist = priority_queue.popitem()
-            visited.add(curr_node)
+            visited_nodes.add(curr_node)
             neighbors = list(self.graph_provider.get_neighbors(curr_node))
             for n in neighbors:
-                if n in visited:
+                if n in visited_nodes:
                     continue
                 alt_path_dist = self._dist[curr_node] + self._distance(curr_node, n)
                 curr_ele_diff = self._elevation(n) - self._elevation(curr_node)
@@ -141,8 +141,6 @@ class Dijkstra(SearchAlgorithm):
         while curr_node is not None:
             path.append(curr_node)
             if end_is_source:
-                # ele_diff's were computed moving forward toward 'node', so we
-                # must be careful to get the right contribution here
                 cum_ele_diff += max([0., -self._ele_diff[successor]])
             else:
                 cum_ele_diff += max([0., self._ele_diff[curr_node]])
@@ -175,7 +173,6 @@ class Dijkstra(SearchAlgorithm):
             A SearchResult describing the path we found, or a default
             SearchResult in the event no path was found.
         """
-        # Should we attempt to minimize elevation?
         minimize_ele = max_path_len < math.inf
 
         # A mapping from nodes to backpointers for reconstructing paths
@@ -186,7 +183,7 @@ class Dijkstra(SearchAlgorithm):
         weight = defaultdict(lambda: math.inf)
         # Map a node 'n' to the (signed) elevation diff between n and prev[n]
         self._ele_diff = {}
-        visited = set()
+        visited_nodes = set()
         priority_queue = heapdict()
 
         source = start if not end_is_source else end
@@ -199,9 +196,8 @@ class Dijkstra(SearchAlgorithm):
         while len(priority_queue) > 0:
             curr_node, curr_weight = priority_queue.popitem()
 
-            # When a node is visited, its values in  dist, prev, weight,
-            # and ele_diff will never be updated again
-            visited.add(curr_node)
+           
+            visited_nodes.add(curr_node)
             if curr_node == start and end_is_source:
                 return self._reconstruct_result(start, end_is_source=end_is_source)
             elif curr_node == end and not end_is_source:
@@ -210,7 +206,7 @@ class Dijkstra(SearchAlgorithm):
             # Explore neighbors to see if we have a new best path to them
             neighbors = list(self.graph_provider.get_neighbors(curr_node))
             for i, n in enumerate(neighbors):
-                if n in visited:
+                if n in visited_nodes:
                     continue
 
                 alt_path_dist = self._dist[curr_node] + self._distance(curr_node, n)
