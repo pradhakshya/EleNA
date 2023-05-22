@@ -1,10 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-
-import osmnx
-import json
-
 from .utilities.path_request import PathRequest
 from .utilities.path_finder import PathFinder
 from .graph_providers.bounded_graph_provider import BoundedGraphProvider
@@ -12,14 +8,13 @@ from .graph_providers.loading_graph_provider import LoadingGraphProvider
 from .routing_algorithms.a_star import AStar
 from .routing_algorithms.dijkstra import Dijkstra
 
+import osmnx
 
 def index(request):
     return render(request, 'nav_sys/index.html', {})
 
 @csrf_exempt
 def search(request):
-    #data = json.loads(request)
-    #print(data)
     place = request.POST['place']
     try:
         coords = osmnx.geocoder.geocode(place)
@@ -30,14 +25,14 @@ def search(request):
 
 @csrf_exempt
 def get_route(request):
-    # Process the request data from the frontend
+   
     origin = request.POST['origin']
     destination = request.POST['destination']
     distance_percent = request.POST['distance']
     ele_setting = request.POST['elevation']
     graph_setting = request.POST['graph']
 
-    # Create a new PathRequest object
+    
     try:
         path_request = PathRequest(origin, destination, distance_percent, ele_setting, graph_setting)
     except ValueError:
