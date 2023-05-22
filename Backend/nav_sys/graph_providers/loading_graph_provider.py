@@ -55,10 +55,10 @@ class LoadingGraphProvider(GraphProvider):
             # ...then load the chunk they belong to first
             for neighbor in neighbors:
                 coords = cache['graph'].nodes[neighbor]
-                cx = math.floor(coords['x'] / MAP_CHUNK_SIZE) * MAP_CHUNK_SIZE
-                cy = math.floor(coords['y'] / MAP_CHUNK_SIZE) * MAP_CHUNK_SIZE
-                if not self._is_chunk_loaded(cx, cy):
-                    self._load_chunk(cx, cy)
+                x_coordinate = math.floor(coords['x'] / MAP_CHUNK_SIZE) * MAP_CHUNK_SIZE
+                y_coordinate = math.floor(coords['y'] / MAP_CHUNK_SIZE) * MAP_CHUNK_SIZE
+                if not self._is_chunk_loaded(x_coordinate, y_coordinate):
+                    self._load_chunk(x_coordinate, y_coordinate)
         return neighbors
 
     def get_distance_estimate(self, node1, node2):
@@ -141,19 +141,19 @@ class LoadingGraphProvider(GraphProvider):
         Returns:
             True if all the chunks in the specified area are loaded
         """
-        cx = math.floor(x / MAP_CHUNK_SIZE)
-        cy = math.floor(y / MAP_CHUNK_SIZE)
+        x_coordinate = math.floor(x / MAP_CHUNK_SIZE)
+        y_coordinate = math.floor(y / MAP_CHUNK_SIZE)
         for i in range(w):
             for j in range(h):
-                if not cache['loaded_chunks'][cx + i][cy + j]:
+                if not cache['loaded_chunks'][x_coordinate + i][y_coordinate + j]:
                     return False
         return True
 
     def _set_chunk_loaded(self, x, y):
         """Marks the chunk at (x, y) as loaded"""
-        cx = math.floor(x / MAP_CHUNK_SIZE)
-        cy = math.floor(y / MAP_CHUNK_SIZE)
-        cache['loaded_chunks'][cx][cy] = True
+        x_coordinate = math.floor(x / MAP_CHUNK_SIZE)
+        y_coordinate = math.floor(y / MAP_CHUNK_SIZE)
+        cache['loaded_chunks'][x_coordinate][y_coordinate] = True
 
     # Compute the initial bounding box based on the start and end coordinates
     def _compute_initial_area(self, start, end):
