@@ -95,7 +95,8 @@ class LoadingGraphProvider(GraphProvider):
             'y': node_data['y'],
             'z': node_data['elevation']
         }
-
+    
+    # Load and merge the map chunk at (x, y) into the cache['graph'] if it is not already loaded
     def _load_chunk(self, x, y, w = 1, h = 1):
         """Download the map associated with the chunk at (x, y) and merge it into cache['graph']
 
@@ -154,6 +155,7 @@ class LoadingGraphProvider(GraphProvider):
         cy = math.floor(y / CHUNK_SIZE)
         cache['loaded_chunks'][cx][cy] = True
 
+    # Compute the initial bounding box based on the start and end coordinates
     def _compute_initial_area(self, start, end):
         """Computes the initial bounding box to load"""
         n = max(start[0], end[0])
