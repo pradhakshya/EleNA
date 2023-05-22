@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@fseehawer/react-circular-slider": "^2.5.16"
+  }
+}

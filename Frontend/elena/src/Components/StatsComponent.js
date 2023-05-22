@@ -3,24 +3,24 @@
 
 import * as React from 'react';
 import { Card, CardContent,CardMedia, Typography,CardActionArea } from '@material-ui/core';
-import image from '../assets/cycleman.jpg'
+import image from '../assets/cycling.webp'
 
 export default function StatsComponent({stats}) {
   return (
-    <Card style={{marginLeft:70,marginTop:120,height:350,width:400, backgroundColor: '#86d63d'}}>
+    <Card style={{marginLeft:70,marginTop:120,height:250,width:400}}>
       <CardActionArea>
         <CardMedia
           component="img"
-          height="250"
+          height="150"
           image={image}
           alt="green iguana"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            Elevation:{stats.elevationGain}m
+            Elevation Gain: {stats.elevationGain}m
           </Typography>
           <Typography gutterBottom variant="h5" component="div">
-            Distance:{stats.pathLength}m
+            Route Length: {stats.pathLength}m
           </Typography>
         </CardContent>
       </CardActionArea>
