@@ -17,6 +17,23 @@ cache = {
     'graph': nx.MultiDiGraph()
 }
 
+cache_entry_counter = 0
+CACHE_CLEAR_THRESHOLD = 200
+
+def clear_cache():
+    """Clear the cache"""
+    cache['loaded_chunks'] = defaultdict(lambda: defaultdict(lambda: False))
+    cache['graph'] = nx.MultiDiGraph()
+    global cache_entry_counter
+    cache_entry_counter = 0
+
+def add_to_cache():
+    """Add an entry to the cache and check if it's time to clear the cache"""
+    global cache_entry_counter
+    cache_entry_counter += 1
+    if cache_entry_counter >= CACHE_CLEAR_THRESHOLD:
+        clear_cache()
+
 class LoadingGraphProvider(GraphProvider):
     """Graph provider implementation that lazily loads sections of the world map.
 
