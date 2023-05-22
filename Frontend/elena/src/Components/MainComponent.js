@@ -165,6 +165,8 @@ const MainComponent =()=>{
         });
         setMap(map);
       }
+
+
       
          /* Method to pre-process the api data
    */
@@ -215,6 +217,13 @@ const MainComponent =()=>{
         setDest(latLng);
      }
 
+      const handleHelp = () => {
+        // Add your code here to handle the help button click
+        // For example, you can open a dialog or show a tooltip with help information
+        alert("\nStep 1: Input Start and Destination.\n Step 2: Specify Elevation Preferences.\n Step 3: Select Routing Mode.\n Step 4: Calculate the Route.\n Step 5: Review and Confirm.\n Step 6: Navigate.");
+      };
+
+
       /* Method to handle reset and empty the field content
    */
      const handleReset = ()=>{
@@ -246,6 +255,16 @@ const MainComponent =()=>{
             <Typography variant="h3" className={classes.logo}>
               Elena
             </Typography>
+            <button className="help-button">?</button>
+            <div className="help-content">
+              <p>Step 1: Enter source and destination.
+              Step 2: Specify Elevation Preferences.
+              Step 3: Adjust distance percentage and elevation preference.
+              Step 4: Click "Start" to search for the best route.
+              Step 5: View the route on the map.
+              Step 6: Explore route statistics.
+              Step 7: Click "Reset" to plan a new route.</p>
+            </div>
             <img style={{ marginLeft: 10, width: 70, height: 60 }} src={logo} />
           </Toolbar>
         </AppBar>
@@ -283,7 +302,7 @@ const MainComponent =()=>{
                 valueLabelDisplay="auto"
                 value={percentage}
                 onChange={(e, val) => setPercentage(val)}
-                style={{color: "green"}}
+                style={{ color: "green" }}
               />
             </Box>
             <Button
@@ -319,6 +338,24 @@ const MainComponent =()=>{
             >
               Reset
             </Button>
+
+            {/* <Button
+              style={{
+                background: "#BAFF39",
+                color: "#000000",
+                width: 70,
+                position: "relative",
+                float: "left",
+                marginLeft: 180,
+                marginTop: 50,
+                marginBottom: 30,
+              }}
+              variant="contained"
+              onClick={handleHelp}
+            >
+              ?
+            </Button> */}
+
             {isLoading && (
               <CircularProgress className="progress" color="'#4D148C'" />
             )}

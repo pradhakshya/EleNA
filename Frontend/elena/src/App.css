@@ -12,6 +12,31 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.help-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 10px 15px;
+  font-size: 18px;
+  border: none;
+  background-color: #b3f963;
+  color: #333;
+  cursor: pointer;
+}
+
+.help-content {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 200px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #333;
+}
 
 .App-header {
   background-color: #282c34;
@@ -23,6 +48,11 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.help-button:hover + .help-content,
+.help-content:hover{
+  display: block;
+}
+
 
 .App-link {
   color: #61dafb;
