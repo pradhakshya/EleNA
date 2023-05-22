@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { Card, CardContent,CardMedia, Typography,CardActionArea } from '@material-ui/core';
-import image from '../assets/cycling.webp'
+import image from '../assets/cycleman.jpg'
 
 export default function StatsComponent({stats}) {
   return (

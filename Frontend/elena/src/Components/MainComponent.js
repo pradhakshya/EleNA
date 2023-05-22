@@ -133,7 +133,7 @@ const MainComponent =()=>{
           if(mapRoute)
              mapRoute.remove();
           var newRouteLine = L.polyline(route)
-          newRouteLine.setStyle({color:'red'})
+          newRouteLine.setStyle({color:'blue'})
           newRouteLine.addTo(map)
           setMapRoute(newRouteLine);
           if(sourceMarker)
@@ -238,58 +238,117 @@ const MainComponent =()=>{
     /* Rendering UI for the ELENA dashboard
    */
  
-    return(<div><AppBar class={classes.appbar} position="static">
-        <CssBaseline />
-      <Toolbar>
-        <Typography variant="h3" className={classes.logo}>
-          Elena
-        </Typography>
-        <img style={{marginLeft:10,width:70,height:60}} src={logo}/>
-      </Toolbar>
-    </AppBar>
-    <Paper class={classes.root}>
-        <Paper style={{flexDirection:'column',width:900}}>
-    <AutoComplete inputRef={inputRef1} onChange={sourceChange} placeHolder = 'Source' />
-    <AutoComplete inputRef={inputRef2} onChange={destinationChange} placeHolder = 'Destination'/>
-    <ToggleButtonGroup
-      color="primary"
-      value={alignment}
-      exclusive
-      onChange={handleChange}
-      className='toggle'
-    >
-      <ToggleButton value="max">Max elevation</ToggleButton>
-      <ToggleButton value="min">Min elevation</ToggleButton>
-    </ToggleButtonGroup>
-    <Box width={300} className='slider'>
-    <Typography id="input-slider" gutterBottom>
-        {percentage}% of shortest distance
-      </Typography>
-    <Slider  min={100} max={200} defaultValue={110} aria-label="Default" valueLabelDisplay="auto" value={percentage} onChange={ (e, val) => setPercentage(val) }/>
-    </Box>
-    <Button style={{background:'#FF6101' , color: '#ffffff', width:150,position: 'relative',float:'left',marginLeft: 120, marginTop: 50,marginBotom: 30}} 
-      variant="contained" onClick={handleSubmit}>Let's Start</Button>
-      <Button style={{background:'#FF6101' , color: '#ffffff', width:70,position: 'relative',float:'left',marginLeft: 30,marginRight: 50, marginTop: 50,marginBotom: 30}} 
-      variant="contained" onClick={handleReset}>Reset</Button>
-     {isLoading && <CircularProgress className="progress" color="'#4D148C'"/>}
-     {!isLoading && stats && <div><StatsComponent stats={stats}/></div>
-     }
-    </Paper>
-    <div class={classes.map} style={{ height: '100vh', width: '100%' }}>
-    <div id='map'></div>
-      <Dialog open={dialog}>
-        <DialogTitle>Directions</DialogTitle>
-        <DialogContent>{Parser(steps)}</DialogContent>
-        <DialogActions>
-          <Button onClick={()=>{setDialog(false)}} 
-                  color="primary" autoFocus>
-            Close
-          </Button>
-          </DialogActions>
-      </Dialog>
-    </div>
-    </Paper>
-    </div>);
+    return (
+      <div>
+        <AppBar class={classes.appbar} position="static">
+          <CssBaseline />
+          <Toolbar>
+            <Typography variant="h3" className={classes.logo}>
+              Elena
+            </Typography>
+            <img style={{ marginLeft: 10, width: 70, height: 60 }} src={logo} />
+          </Toolbar>
+        </AppBar>
+        <Paper class={classes.root}>
+          <Paper style={{ flexDirection: "column", width: 800 }}>
+            <AutoComplete
+              inputRef={inputRef1}
+              onChange={sourceChange}
+              placeHolder="Source"
+            />
+            <AutoComplete
+              inputRef={inputRef2}
+              onChange={destinationChange}
+              placeHolder="Destination"
+            />
+            <ToggleButtonGroup
+              color="primary"
+              value={alignment}
+              exclusive
+              onChange={handleChange}
+              className="toggle"
+            >
+              <ToggleButton value="max">Maximum</ToggleButton>
+              <ToggleButton value="min">Minimum</ToggleButton>
+            </ToggleButtonGroup>
+            <Box width={300} className="slider">
+              <Typography id="input-slider" gutterBottom>
+                {percentage}% of shortest distance
+              </Typography>
+              <Slider
+                min={100}
+                max={200}
+                defaultValue={110}
+                aria-label="Default"
+                valueLabelDisplay="auto"
+                value={percentage}
+                onChange={(e, val) => setPercentage(val)}
+                style={{color: "green"}}
+              />
+            </Box>
+            <Button
+              style={{
+                background: "#BAFF39",
+                color: "#000000",
+                width: 70,
+                position: "relative",
+                float: "left",
+                marginLeft: 180,
+                marginTop: 50,
+                marginBotom: 30,
+              }}
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              Start
+            </Button>
+            <Button
+              style={{
+                background: "#BAFF39",
+                color: "#000000",
+                width: 70,
+                position: "relative",
+                float: "left",
+                marginLeft: 30,
+                marginRight: 50,
+                marginTop: 50,
+                marginBotom: 30,
+              }}
+              variant="contained"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
+            {isLoading && (
+              <CircularProgress className="progress" color="'#4D148C'" />
+            )}
+            {!isLoading && stats && (
+              <div>
+                <StatsComponent stats={stats} />
+              </div>
+            )}
+          </Paper>
+          <div class={classes.map} style={{ height: "100vh", width: "100%" }}>
+            <div id="map"></div>
+            <Dialog open={dialog}>
+              <DialogTitle>Directions</DialogTitle>
+              <DialogContent>{Parser(steps)}</DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setDialog(false);
+                  }}
+                  color="primary"
+                  autoFocus
+                >
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        </Paper>
+      </div>
+    );
 };
 
 export default MainComponent;
