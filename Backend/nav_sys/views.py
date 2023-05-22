@@ -53,7 +53,6 @@ def get_route(request):
     # For finding the minimal elevation gain path, the AStar algorithm is used
     # For finding the maximal elevation gain path, Dijkstra's algorithm is used
 
-
     if path_request.ele_setting == 'minimal':
         ele_search_algo = AStar(graph_provider)
     elif path_request.ele_setting == 'maximal':

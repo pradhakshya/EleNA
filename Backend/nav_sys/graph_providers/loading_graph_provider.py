@@ -7,7 +7,7 @@ from ..utilities.keys import api_key
 from .graph_provider import GraphProvider
 
 # Side length of chunk in degrees
-CHUNK_SIZE = 0.01
+MAP_CHUNK_SIZE = 0.01
 
 # The keys to the loaded_chunks dict are given as integers in units of CHUNK_SIZE
 # (e.g. if CHUNK_SIZE=0.01, then the bool describing whether chunk with...
@@ -55,13 +55,13 @@ class LoadingGraphProvider(GraphProvider):
             # ...then load the chunk they belong to first
             for neighbor in neighbors:
                 coords = cache['graph'].nodes[neighbor]
-                cx = math.floor(coords['x'] / CHUNK_SIZE) * CHUNK_SIZE
-                cy = math.floor(coords['y'] / CHUNK_SIZE) * CHUNK_SIZE
+                cx = math.floor(coords['x'] / MAP_CHUNK_SIZE) * MAP_CHUNK_SIZE
+                cy = math.floor(coords['y'] / MAP_CHUNK_SIZE) * MAP_CHUNK_SIZE
                 if not self._is_chunk_loaded(cx, cy):
                     self._load_chunk(cx, cy)
         return neighbors
 
-    def get_distance_estimate(self, n1, n2):
+    def get_distance_estimate(self, node1, node2):
         """Estimate the distance between any two nodes, no edge necessary.
 
         This is useful as a heuristic. Using simple trigonometry, it 
@@ -74,18 +74,18 @@ class LoadingGraphProvider(GraphProvider):
         Returns:
             The estimated distance between the nodes expressed as a number.
         """
-        p1 = self.get_coords(n1)
-        p2 = self.get_coords(n2)
+        point1 = self.get_coords(node1)
+        point2 = self.get_coords(node2)
         # d = sqrt((x - x')^2 + (y - y')^2 + (z - z')^2)
         return math.sqrt(
-            (p1['x'] - p2['x']) ** 2 +
-            (p1['y'] - p2['y']) ** 2 +
-            (p1['z'] - p2['z']) ** 2
+            (point1['x'] - point2['x']) ** 2 +
+            (point1['y'] - point2['y']) ** 2 +
+            (point1['z'] - point2['z']) ** 2
         )
 
     # Compute actual distance between two adjacent nodes
-    def get_edge_distance(self, n1, n2):
-        return cache['graph'].get_edge_data(n1, n2)[0]['length']
+    def get_edge_distance(self, node1, node2):
+        return cache['graph'].get_edge_data(node1, node2)[0]['length']
 
     # Get x, y, and z coordinates from a node id
     def get_coords(self, node):
@@ -110,11 +110,11 @@ class LoadingGraphProvider(GraphProvider):
         if self._is_chunk_loaded(x, y, w, h):
             return
         # Get the northwest corner of the chunk
-        x1 = math.floor(x / CHUNK_SIZE) * CHUNK_SIZE
-        y1 = math.floor(y / CHUNK_SIZE) * CHUNK_SIZE
+        x1 = math.floor(x / MAP_CHUNK_SIZE) * MAP_CHUNK_SIZE
+        y1 = math.floor(y / MAP_CHUNK_SIZE) * MAP_CHUNK_SIZE
         # Get the southeast corner of the chunk
-        x2 = x1 + CHUNK_SIZE * w
-        y2 = y1 + CHUNK_SIZE * h
+        x2 = x1 + MAP_CHUNK_SIZE * w
+        y2 = y1 + MAP_CHUNK_SIZE * h
         compose = nx.algorithms.operators.binary.compose
         # Download the chunk as a graph, including edges that cross the chunk boundary
         subgraph = osmnx.graph.graph_from_bbox(y2, y1, x2, x1, simplify=False, truncate_by_edge=True)
@@ -125,7 +125,7 @@ class LoadingGraphProvider(GraphProvider):
         # Mark all the chunks as loaded
         for i in range(w):
             for j in range(h):
-                self._set_chunk_loaded(x1 + CHUNK_SIZE * i, y1 + CHUNK_SIZE * j)
+                self._set_chunk_loaded(x1 + MAP_CHUNK_SIZE * i, y1 + MAP_CHUNK_SIZE * j)
 
     # Helper methods for checking whether a chunk is loaded and marking it as loaded
 
@@ -141,8 +141,8 @@ class LoadingGraphProvider(GraphProvider):
         Returns:
             True if all the chunks in the specified area are loaded
         """
-        cx = math.floor(x / CHUNK_SIZE)
-        cy = math.floor(y / CHUNK_SIZE)
+        cx = math.floor(x / MAP_CHUNK_SIZE)
+        cy = math.floor(y / MAP_CHUNK_SIZE)
         for i in range(w):
             for j in range(h):
                 if not cache['loaded_chunks'][cx + i][cy + j]:
@@ -151,25 +151,25 @@ class LoadingGraphProvider(GraphProvider):
 
     def _set_chunk_loaded(self, x, y):
         """Marks the chunk at (x, y) as loaded"""
-        cx = math.floor(x / CHUNK_SIZE)
-        cy = math.floor(y / CHUNK_SIZE)
+        cx = math.floor(x / MAP_CHUNK_SIZE)
+        cy = math.floor(y / MAP_CHUNK_SIZE)
         cache['loaded_chunks'][cx][cy] = True
 
     # Compute the initial bounding box based on the start and end coordinates
     def _compute_initial_area(self, start, end):
         """Computes the initial bounding box to load"""
-        n = max(start[0], end[0])
-        s = min(start[0], end[0])
-        e = max(start[1], end[1])
-        w = min(start[1], end[1])
-        longer_diff = max(abs(e - w), abs(n - s))
-        chunk_n = math.ceil((n + longer_diff) / CHUNK_SIZE)
-        chunk_s = math.floor((s - longer_diff) / CHUNK_SIZE)
-        chunk_e = math.ceil((e + longer_diff) / CHUNK_SIZE)
-        chunk_w = math.floor((w - longer_diff) / CHUNK_SIZE)
+        north = max(start[0], end[0])
+        south = min(start[0], end[0])
+        east = max(start[1], end[1])
+        west = min(start[1], end[1])
+        longer_diff = max(abs(east - west), abs(north - south))
+        chunk_north = math.ceil((north + longer_diff) / MAP_CHUNK_SIZE)
+        chunk_south = math.floor((south - longer_diff) / MAP_CHUNK_SIZE)
+        chunk_east = math.ceil((east + longer_diff) / MAP_CHUNK_SIZE)
+        chunk_west = math.floor((west - longer_diff) / MAP_CHUNK_SIZE)
         return {
-            'x': chunk_w * CHUNK_SIZE,
-            'y': chunk_s * CHUNK_SIZE,
-            'w': chunk_e - chunk_w,
-            'h': chunk_n - chunk_s
+            'x': chunk_west * MAP_CHUNK_SIZE,
+            'y': chunk_south * MAP_CHUNK_SIZE,
+            'w': chunk_east - chunk_west,
+            'h': chunk_north - chunk_south
         }
