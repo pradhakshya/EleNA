@@ -23,10 +23,10 @@ To achieve this, we will be implementing the project using a UI-specific approac
 
 # Documentation 
 Please refer the following url for a brief documentation.
-
+https://docs.google.com/document/d/1pElmbr5QlwEvjv2D4tWE5SK-1-RA01Hn-I4BGYHDePc/edit?usp=sharing
 
 # Demo 
 Please navigate to the mentioned url to witness a bried demo of our project.
-
+https://drive.google.com/file/d/1WWxX4hPmCs7UJUldm85vx0I5OyH3OPWt/view?usp=sharing
 
 
