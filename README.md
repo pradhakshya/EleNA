@@ -7,8 +7,6 @@ For fitness enthusiasts like joggers or bikers looking for a rigorous workout, m
 
 To achieve this, we will be implementing the project using a UI-specific approach, utilizing Dijkstra's algorithm for path calculation.
 
-<img width="1463" alt="Screenshot 2022-12-16 at 1 12 26 AM" src="https://user-images.githubusercontent.com/32846217/208034836-914bf48d-706a-46dc-9069-7b5a0ea808ef.png">
-
 
 # Steps to Clone and run the application:
 
